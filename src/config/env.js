@@ -8,7 +8,7 @@ const env = {
 
 	// Database Configuration
 	DB_HOST: process.env.DB_HOST || "localhost",
-	DB_PORT: process.env.DB_PORT || 5432, // Change to 3306 for MySQL
+	DB_PORT: process.env.DB_PORT || 3306, // Change to 3306 for MySQL
 	DB_USER: process.env.DB_USER || "postgres",
 	DB_PASSWORD: process.env.DB_PASSWORD || "password",
 	DB_NAME: process.env.DB_NAME || "event_booking_db",

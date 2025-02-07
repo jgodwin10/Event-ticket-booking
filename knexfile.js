@@ -1,7 +1,7 @@
 import env from "./src/config/env.js";
 
 export default {
-	client: env.DB_CLIENT || "pg",
+	client: env.DB_CLIENT || "mysql2",
 	connection: {
 		host: env.DB_HOST || "127.0.0.1",
 		user: env.DB_USER || "root",

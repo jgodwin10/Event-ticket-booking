@@ -2,9 +2,11 @@ import db from "../config/db.js";
 
 export default class WaitingList {
 	static async addToWaitingList(eventId, userEmail) {
-		const [entry] = await db("waiting_list").insert({ event_id: eventId, user_email: userEmail }).returning("*");
-		console.log(entry);
-		return entry;
+		const [entryId] = await db("waiting_list").insert({ id: db.raw("UUID()"), event_id: eventId, user_email: userEmail });
+
+		const newEvent = await db("waiting_list").where({ id: entryId }).first();
+		console.log(newEvent);
+		return newEvent;
 	}
 
 	static async getNextInLine(eventId) {

@@ -1,9 +1,12 @@
 export function up(knex) {
 	return knex.schema.createTable("waiting_list", (table) => {
-		table.uuid("id").primary().defaultTo(knex.raw("gen_random_uuid()"));
-		table.uuid("event_id").references("id").inTable("events").onDelete("CASCADE");
-		table.string("user_email").notNullable();
+		table.string("id", 36).primary()
+		table.string("event_id", 36).notNullable();
+		table.string("user_email", 255).notNullable();
 		table.timestamp("created_at").defaultTo(knex.fn.now());
+
+		// Foreign Key Constraint
+		table.foreign("event_id").references("id").inTable("events").onDelete("CASCADE");
 	});
 }
 

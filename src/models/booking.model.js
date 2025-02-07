@@ -4,10 +4,16 @@ export default class Booking {
 	static async bookTicket(eventId, userEmail) {
 		console.log(eventId);
 
-		const [booking] = await db("bookings").insert({ event_id: eventId, user_email: userEmail }).returning("*")
+		const [bookingId] = await db("bookings").insert({
+			id: db.raw("UUID()"),
+			event_id: eventId,
+			user_email: userEmail,
+		});
 
-		console.log(booking);
-		return booking;
+		// const [booking] = await db("bookings").insert({ event_id: eventId, user_email: userEmail }).returning("*");
+
+		const newEvent = await db("bookings").where({ id: bookingId }).first();
+		return newEvent;
 	}
 
 	static async getBooking(eventId, userEmail) {

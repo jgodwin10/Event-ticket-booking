@@ -3,7 +3,7 @@ import { Model } from "objection";
 import env from "./env.js";
 
 const db = knex({
-	client: "pg", // the database used
+	client: "mysql", // the database used
 	connection: {
 		host: env.DB_HOST,
 		port: env.DB_PORT,
@@ -21,6 +21,6 @@ const db = knex({
 	},
 });
 
-Model.knex(db);
+// Model.knex(db);
 
 export default db;

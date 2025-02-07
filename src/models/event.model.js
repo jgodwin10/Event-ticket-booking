@@ -2,14 +2,17 @@ import db from "../config/db.js";
 
 export default class Event {
 	static async createEvent({ name, totalTickets }) {
-		const [event] = await db("events")
-			.insert({
-				name,
-				total_tickets: totalTickets,
-				available_tickets: totalTickets,
-			})
-			.returning("*");
-		return event;
+		const [eventId] = await db("events").insert({
+			id: db.raw("UUID()"),
+			name,
+			total_tickets: totalTickets,
+			available_tickets: totalTickets,
+		});
+
+		// Fetch the inserted record separately
+		const newEvent = await db("events").where({ id: eventId }).first();
+
+		return newEvent;
 	}
 
 	static async getEventById(eventId) {
@@ -17,6 +20,10 @@ export default class Event {
 	}
 
 	static async updateAvailableTickets(eventId, count) {
-		return db("events").where({ id: eventId }).update({ available_tickets: count });
+		console.log(count);
+		(await db("events").where({ id: eventId }).decrement("available_tickets", count)).toString();
+		console.log("updatedEvent");
+
+		return;
 	}
 }
