@@ -1,8 +1,12 @@
 import db from "../config/db.js";
+import AppError from "../utils/Error.js";
+import { isValidEmail } from "../utils/validEmail.js";
 
 export default class BookingService {
 	static async bookTicket(eventId, userEmail) {
-		if (!eventId || !userEmail) throw new Error("All fields need to be filled");
+		if (!eventId || !userEmail) throw new AppError("All fields need to be filled", 400);
+
+		if (!isValidEmail(userEmail)) throw new AppError("Invalid email format", 400);
 
 		let retries = 3; // Retry mechanism for deadlocks
 
@@ -13,8 +17,9 @@ export default class BookingService {
 					const existingBooking = await trx("bookings").where({ event_id: eventId, user_email: userEmail }).first();
 					const existingEvent = await trx("events").where({ id: eventId }).first();
 
-					if (existingBooking) throw new Error("You already booked this event");
-					if (!existingEvent) throw new Error("This event does not exist");
+					if (!existingEvent) throw new AppError("No event found, check back later", 404);
+
+					if (existingBooking) throw new AppError("You already booked this event", 409);
 
 					// Lock the event row and get available tickets
 					const event = await trx("events").where({ id: eventId }).select("available_tickets").forUpdate(); // Prevents concurrent modifications
@@ -42,16 +47,21 @@ export default class BookingService {
 			}
 		}
 
-		throw new Error("Booking failed after multiple attempts");
+		throw new AppError("Booking failed after multiple attempts", 429);
 	}
 
 	static async cancelBooking(eventId, userEmail) {
-		if (!eventId || !userEmail) throw new Error("All fields need to be filled");
+		if (!eventId || !userEmail) throw new AppError("All fields need to be filled", 400);
+
+		if (!isValidEmail(userEmail)) throw new AppError("Invalid email format", 400);
 
 		return await db.transaction(async (trx) => {
+			const existingEvent = await trx("events").where({ id: eventId }).first();
 			const booking = await trx("bookings").where({ event_id: eventId, user_email: userEmail }).first();
 
-			if (!booking) throw new Error("You didn't book this event");
+			if (!existingEvent) throw new AppError("No event found, check back later", 404);
+
+			if (!booking) throw new AppError("You didn't book this event", 404);
 
 			// Cancel the booking
 			await trx("bookings").where({ event_id: eventId, user_email: userEmail }).del();
