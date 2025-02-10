@@ -1,4 +1,4 @@
-Event Ticket Booking System
+##Event Ticket Booking System
 
 Introduction
 
@@ -9,7 +9,7 @@ The project follows Test-Driven Development (TDD) principles and ensures efficie
 
 ---
 
-Features
+##Features
 
 ✅ Initialize an event with a set number of tickets
 ✅ Concurrent ticket booking with race condition handling
@@ -23,7 +23,7 @@ Features
 
 ---
 
-Technologies Used
+##Technologies Used
 
 Node.js with Express.js – Backend framework
 
@@ -37,7 +37,7 @@ Jest/Supertest – TDD and API testing
 
 ---
 
-API Endpoints
+##API Endpoints
 
 1️⃣ Initialize Event
 
@@ -113,7 +113,7 @@ Response:
 
 ---
 
-Installation & Setup
+##Installation & Setup
 
 Prerequisites
 
@@ -163,7 +163,7 @@ npm test
 
 ---
 
-Design Decisions
+##Design Decisions
 
 Used Express.js for lightweight, scalable API development.
 
