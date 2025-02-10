@@ -1,6 +1,6 @@
-##Event Ticket Booking System
+# Event Ticket Booking System
 
-Introduction
+## Introduction
 
 This is a Node.js-based Event Ticket Booking System that allows users to book event tickets, manages a waiting list when tickets are sold out, and handles ticket cancellations with automatic reassignment.
 
@@ -9,7 +9,7 @@ The project follows Test-Driven Development (TDD) principles and ensures efficie
 
 ---
 
-##Features
+## Features
 
 ✅ Initialize an event with a set number of tickets
 ✅ Concurrent ticket booking with race condition handling
@@ -23,7 +23,7 @@ The project follows Test-Driven Development (TDD) principles and ensures efficie
 
 ---
 
-##Technologies Used
+## Technologies Used
 
 Node.js with Express.js – Backend framework
 
@@ -37,7 +37,7 @@ Jest/Supertest – TDD and API testing
 
 ---
 
-##API Endpoints
+## API Endpoints
 
 1️⃣ Initialize Event
 
@@ -113,9 +113,9 @@ Response:
 
 ---
 
-##Installation & Setup
+## Installation & Setup
 
-Prerequisites
+### Prerequisites
 
 Node.js (v16+ recommended)
 
@@ -154,7 +154,7 @@ API will be available at http://localhost:5000.
 
 ---
 
-Running Tests
+## Running Tests
 
 To run unit and integration tests:
 
@@ -163,7 +163,7 @@ npm test
 
 ---
 
-##Design Decisions
+## Design Decisions
 
 Used Express.js for lightweight, scalable API development.
 
