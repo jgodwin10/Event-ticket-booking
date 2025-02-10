@@ -1,26 +1,8 @@
 import knex from "knex";
-import { Model } from "objection";
 import env from "./env.js";
+import knexConfig from "../../knexfile.js";
 
-const db = knex({
-	client: "mysql", // the database used
-	connection: {
-		host: env.DB_HOST,
-		port: env.DB_PORT,
-		user: env.DB_USER,
-		password: env.DB_PASSWORD,
-		database: env.DB_NAME,
-	},
-	pool: {
-		min: 2,
-		max: 10,
-	},
-	migrations: {
-		tableName: "knex_migrations",
-		directory: "./src/database/migrations",
-	},
-});
-
-// Model.knex(db);
+const environment = env.NODE_ENV || "development";
+const db = knex(knexConfig[environment]);
 
 export default db;

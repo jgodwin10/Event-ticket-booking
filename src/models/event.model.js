@@ -10,9 +10,9 @@ export default class Event {
 		});
 
 		// Fetch the inserted record separately
-		const newEvent = await db("events").where({ id: eventId }).first();
+		return await db("events").orderBy("created_at", "desc").first();
 
-		return newEvent;
+		// return newEvent;
 	}
 
 	static async getEventById(eventId) {

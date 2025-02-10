@@ -1,5 +1,6 @@
 import db from "../config/db.js";
 import AppError from "../utils/Error.js";
+import logger from "../utils/logger.js";
 import { isValidEmail } from "../utils/validEmail.js";
 
 export default class BookingService {
@@ -26,6 +27,7 @@ export default class BookingService {
 
 					if (!event.length || event[0].available_tickets <= 0) {
 						await trx("waiting_list").insert({ id: db.raw("UUID()"), event_id: eventId, user_email: userEmail });
+						logger.info(`Booking successfull, User: ${userEmail} on Event: ${eventId} is added to waitlist`);
 						return { message: "Event sold out, you're added to the waiting list" };
 					}
 
@@ -70,15 +72,17 @@ export default class BookingService {
 			const nextUser = await trx("waiting_list").where({ event_id: eventId }).orderBy("created_at", "asc").first();
 
 			if (nextUser) {
+				logger.info(`Cancellation processed - User: ${userEmail} canceled. Assigned to next waiting user: ${nextUser}`);
 				// Book the ticket for the next user and remove from the waiting list
 				await trx("bookings").insert({ id: db.raw("UUID()"), event_id: eventId, user_email: nextUser.user_email });
 				await trx("waiting_list").where({ event_id: eventId, user_email: nextUser.user_email }).del();
 			} else {
+				logger.info(`Cancellation processed - User: ${userEmail} canceled. No users on waiting list.`);
 				// Increment the available tickets if no one is in the queue
 				await trx("events").where({ id: eventId }).increment("available_tickets", 1);
 			}
 
-			return { message: "Your booking has been canceled successfully" };
+			return { message: "Your booking has been cancelled successfully" };
 		});
 	}
 }
